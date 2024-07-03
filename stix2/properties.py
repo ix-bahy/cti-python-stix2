@@ -40,8 +40,8 @@ def _check_uuid(uuid_str, spec_version):
     :raises ValueError: If uuid_str is malformed
     """
     uuid_obj = uuid.UUID(uuid_str)
-
-    ok = uuid_obj.variant == uuid.RFC_4122
+    uuid_variants=[uuid.RESERVED_NCS, uuid.RFC_4122, uuid.RESERVED_MICROSOFT, uuid.RESERVED_FUTURE ]
+    ok = uuid_obj.variant in uuid_variants
     if ok and spec_version == "2.0":
         ok = uuid_obj.version == 4
 
