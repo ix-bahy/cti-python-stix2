@@ -46,6 +46,24 @@ def _check_uuid(uuid_str, spec_version):
         ok = uuid_obj.version == 4
 
     return ok
+def _easy_check_uuid(uuid_str, spec_version):
+    """
+    Check whether the given UUID string is valid with respect to the given STIX
+    spec version.  STIX 2.0 requires UUIDv4; 2.1 only requires the RFC 4122
+    variant.
+
+    :param uuid_str: A UUID as a string
+    :param spec_version: The STIX spec version
+    :return: True if the UUID is valid, False if not
+    :raises ValueError: If uuid_str is malformed
+    """
+    uuid_obj = uuid.UUID(uuid_str)
+    uuid_variants=[uuid.RESERVED_NCS, uuid.RFC_4122, uuid.RESERVED_MICROSOFT, uuid.RESERVED_FUTURE ]
+    ok = uuid_obj.variant in uuid_variants
+    if ok and spec_version == "2.0":
+        ok = uuid_obj.version == 4
+
+    return ok
 
 
 def _validate_id(id_, spec_version, required_prefix):
@@ -71,7 +89,7 @@ def _validate_id(id_, spec_version, required_prefix):
             idx = id_.index("--")
             uuid_part = id_[idx+2:]
 
-        result = _check_uuid(uuid_part, spec_version)
+        result = _easy_check_uuid(uuid_part, spec_version)
     except ValueError:
         # replace their ValueError with ours
         raise ValueError(ERROR_INVALID_ID.format(id_))
