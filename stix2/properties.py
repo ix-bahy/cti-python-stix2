@@ -40,20 +40,19 @@ def _check_uuid(uuid_str, spec_version):
     :raises ValueError: If uuid_str is malformed
     """
     uuid_obj = uuid.UUID(uuid_str)
-    uuid_variants=[uuid.RESERVED_NCS, uuid.RFC_4122, uuid.RESERVED_MICROSOFT, uuid.RESERVED_FUTURE ]
-    ok = uuid_obj.variant in uuid_variants
+    ok = uuid_obj.variant ==  uuid.RFC_4122
     if ok and spec_version == "2.0":
         ok = uuid_obj.version == 4
 
     return ok
-def _easy_check_uuid(uuid_str, spec_version):
+def _easy_check_uuid(uuid_str, spec_version="2.1"):
     """
-    Check whether the given UUID string is valid with respect to the given STIX
-    spec version.  STIX 2.0 requires UUIDv4; 2.1 only requires the RFC 4122
+    Check whether the given UUID string is valid with without respect to the given STIX
+    spec version.  Used when mapping an old STIX version 1.* to the newer versions
     variant.
 
     :param uuid_str: A UUID as a string
-    :param spec_version: The STIX spec version
+    :param spec_version: The STIX spec version added so that the code won't break
     :return: True if the UUID is valid, False if not
     :raises ValueError: If uuid_str is malformed
     """
