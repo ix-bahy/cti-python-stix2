@@ -59,11 +59,8 @@ def _easy_check_uuid(uuid_str, spec_version):
     """
     uuid_obj = uuid.UUID(uuid_str)
     uuid_variants=[uuid.RESERVED_NCS, uuid.RFC_4122, uuid.RESERVED_MICROSOFT, uuid.RESERVED_FUTURE ]
-    ok = uuid_obj.variant in uuid_variants
-    if ok and spec_version == "2.0":
-        ok = uuid_obj.version == 4
 
-    return ok
+    return uuid_obj.variant in uuid_variants
 
 
 def _validate_id(id_, spec_version, required_prefix):
